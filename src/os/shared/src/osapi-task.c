@@ -182,11 +182,15 @@ int32 OS_TaskCreate(osal_id_t *task_id, const char *task_name, osal_task_entry f
      * Check parameters
      *
      * Note "stack_pointer" is not checked, because in certain configurations it can be validly null.
+     * Note "stack_size" may be '0' to use the default stack size
      */
     OS_CHECK_POINTER(task_id);
     OS_CHECK_POINTER(function_pointer);
     OS_CHECK_APINAME(task_name);
-    OS_CHECK_SIZE(stack_size);
+    if (stack_size)
+    {
+        OS_CHECK_SIZE(stack_size);
+    }
 
     /* Note - the common ObjectIdAllocate routine will lock the object type and leave it locked. */
     return_code = OS_ObjectIdAllocateNew(LOCAL_OBJID_TYPE, task_name, &token);
